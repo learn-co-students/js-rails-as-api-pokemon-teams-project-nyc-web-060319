@@ -7,7 +7,6 @@ class PokemonsController < ApplicationController
         pokemon = Pokemon.find_by(id: params[:id])
         pokemon.trainer_id = params[:pokemon][:trainer_id]
         pokemon.save!
-
     end
 
 end

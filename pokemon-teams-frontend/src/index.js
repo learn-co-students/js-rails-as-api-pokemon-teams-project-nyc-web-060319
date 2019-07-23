@@ -12,6 +12,35 @@ function getTrainerPokemons(trainerID) {
     return fetch(`${TRAINERS_URL}/${trainerID}`).then(resp => resp.json());
 }
 
+
+function createPokemonLI(pokemon, listPokemon) {
+    const pokemonLI = document.createElement("li");
+    pokemonLI.innerText = pokemon.nickname;
+    
+    const pokemonReleaseButton = document.createElement("button");
+    pokemonReleaseButton.innerText = "Release";
+    pokemonReleaseButton.className = "release";
+    pokemonReleaseButton.dataset.id = pokemon.id;
+    pokemonReleaseButton.addEventListener('click', (event) => {
+        fetch(`${POKEMONS_URL}/${pokemon.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                "trainer_id": ""
+            })
+        }).then(()=> {
+            pokemonLI.remove();
+        })
+    })
+
+    pokemonLI.appendChild(pokemonReleaseButton);
+    listPokemon.appendChild(pokemonLI);
+
+}
+
 function renderTrainers() {
     return getTrainers().then(trainers => {
         trainers.forEach(trainer => {
@@ -23,44 +52,42 @@ function renderTrainers() {
             const trainerNamePTag = document.createElement("p");
             trainerNamePTag.innerText = trainer.name;
             divContainer.appendChild(trainerNamePTag);
+
+            const listPokemon = document.createElement("ul");
+
             
             const addPokemonButton = document.createElement("button");
             addPokemonButton.innerText = "Add pokemon";
             addPokemonButton.className = "add-pokemon-button";
             addPokemonButton.dataset.id = trainer.id;
+            addPokemonButton.addEventListener('click', () => {
+                fetch(`${TRAINERS_URL}/${trainer.id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Content-Type" : 'application/json',
+                        "Accept" : 'application/json'
+                    },
+                    body: JSON.stringify( {
+                        "trainer_id": trainer.id
+                    })
+                }).then(resp => resp.json()).then(resp => {
+                    if (resp != null) {
+                        createPokemonLI(resp, listPokemon);
+                    }
+                    else {
+                        window.alert("No pokemon available!");
+                    }
+                })
+            })
 
 
             divContainer.appendChild(addPokemonButton);
 
-            const listPokemon = document.createElement("ul");
             divContainer.appendChild(listPokemon);
 
             getTrainerPokemons(trainer.id).then(pokemons => {
                 pokemons.forEach(pokemon => {
-                    const pokemonLI = document.createElement("li");
-                    pokemonLI.innerText = pokemon.nickname;
-                    
-                    const pokemonReleaseButton = document.createElement("button");
-                    pokemonReleaseButton.innerText = "Release";
-                    pokemonReleaseButton.className = "release";
-                    pokemonReleaseButton.dataset.id = pokemon.id;
-                    pokemonReleaseButton.addEventListener('click', (event) => {
-                        fetch(`${POKEMONS_URL}/${pokemon.id}`, {
-                            method: 'PATCH',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                "trainer_id": ""
-                            })
-                        }).then(()=> {
-                            pokemonLI.remove();
-                        })
-                    })
-
-                    pokemonLI.appendChild(pokemonReleaseButton);
-                    listPokemon.appendChild(pokemonLI);
+                    createPokemonLI(pokemon, listPokemon);
                 })
             })
             mainContainer.appendChild(divContainer);
