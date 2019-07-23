@@ -6,9 +6,6 @@ const mainContainer = document.querySelector("main");
 function getTrainers(){
     return fetch(TRAINERS_URL)
         .then(resp => resp.json())
-        // .then(resp => {
-        //     return resp;
-        // })
 }
 
 function getTrainerPokemons(trainerID) {
@@ -29,6 +26,10 @@ function renderTrainers() {
             
             const addPokemonButton = document.createElement("button");
             addPokemonButton.innerText = "Add pokemon";
+            addPokemonButton.className = "add-pokemon-button";
+            addPokemonButton.dataset.id = trainer.id;
+
+
             divContainer.appendChild(addPokemonButton);
 
             const listPokemon = document.createElement("ul");
@@ -49,13 +50,27 @@ function renderTrainers() {
                 })
             })
             mainContainer.appendChild(divContainer);
+            console.log("trainers rendered");
 
-
-            
-        })    
-    }).then(() => {
-        
+        })
     })
+}
+
+renderTrainers();
+
+function releasePokemon(event) {
+ console.log(e.target)
+}
+
+function addPokemon(event) {
 
 }
-renderTrainers();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const anyReleaseButton = document.querySelectorAll(".release");
+    anyReleaseButton.addEventListener('click', releasePokemon);
+
+    const anyAddPokemonButton = document.querySelectorAll(".add-pokemon-button");
+    anyAddPokemonButton.addEventListener('click', addPokemon);
+})
+
