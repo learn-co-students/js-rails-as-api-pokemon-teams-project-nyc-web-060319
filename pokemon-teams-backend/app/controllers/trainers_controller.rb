@@ -15,12 +15,24 @@ class TrainersController < ApplicationController
 
     def update
         # byebug
+        trainer = Trainer.find(params[:id])
+        if trainer.pokemons.length >= 6 
+            render json: nil
+            return
+        end
         randomPoke = Pokemon.where(trainer_id: nil).sample
         if randomPoke != nil
             randomPoke.trainer_id = params[:id]
             randomPoke.save!
+            render json: randomPoke
+        else
+            randomPoke = Pokemon.create_random_pokemon
+            # byebug
+            randomPoke.trainer_id = params[:id]
+            randomPoke.save!
+            render json: randomPoke
+
         end
-        render json: randomPoke
     end
 
 end

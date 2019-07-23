@@ -75,7 +75,7 @@ function renderTrainers() {
                         createPokemonLI(resp, listPokemon);
                     }
                     else {
-                        window.alert("No pokemon available!");
+                        window.alert("Cannot add pokemon!");
                     }
                 })
             })
