@@ -9,7 +9,7 @@ function getTrainers(){
 }
 
 function getTrainerPokemons(trainerID) {
-    return fetch(`${POKEMONS_URL}/${trainerID}`).then(resp => resp.json());
+    return fetch(`${TRAINERS_URL}/${trainerID}`).then(resp => resp.json());
 }
 
 function renderTrainers() {
@@ -44,6 +44,20 @@ function renderTrainers() {
                     pokemonReleaseButton.innerText = "Release";
                     pokemonReleaseButton.className = "release";
                     pokemonReleaseButton.dataset.id = pokemon.id;
+                    pokemonReleaseButton.addEventListener('click', (event) => {
+                        fetch(`${POKEMONS_URL}/${pokemon.id}`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                "trainer_id": ""
+                            })
+                        }).then(()=> {
+                            pokemonLI.remove();
+                        })
+                    })
 
                     pokemonLI.appendChild(pokemonReleaseButton);
                     listPokemon.appendChild(pokemonLI);
@@ -66,11 +80,11 @@ function addPokemon(event) {
 
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const anyReleaseButton = document.querySelectorAll(".release");
-    anyReleaseButton.addEventListener('click', releasePokemon);
+// document.addEventListener("DOMContentLoaded", () => {
+//     const anyReleaseButton = document.querySelectorAll(".release");
+//     anyReleaseButton.addEventListener('click', releasePokemon);
 
-    const anyAddPokemonButton = document.querySelectorAll(".add-pokemon-button");
-    anyAddPokemonButton.addEventListener('click', addPokemon);
-})
+//     const anyAddPokemonButton = document.querySelectorAll(".add-pokemon-button");
+//     anyAddPokemonButton.addEventListener('click', addPokemon);
+// })
 

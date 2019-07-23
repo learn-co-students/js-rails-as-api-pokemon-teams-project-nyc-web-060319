@@ -1,4 +1,4 @@
-require_relative 'boot'
+require_relative "boot"
 
 require "rails"
 # Pick the frameworks you want:
@@ -38,7 +38,7 @@ module PokemonTeamsBackend
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
-        resource '*', headers: :any, methods: [:get, :post, :delete]
+        resource '*', headers: :any, methods: [:get, :post, :delete, :patch, :show]
       end
     end
   end

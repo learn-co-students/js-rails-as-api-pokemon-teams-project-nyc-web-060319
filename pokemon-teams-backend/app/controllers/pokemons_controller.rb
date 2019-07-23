@@ -3,9 +3,11 @@ class PokemonsController < ApplicationController
         render json: Pokemon.all
     end
 
-    def show
-        # trainer_id = params[:id]
-        pokemons = Pokemon.all.where(trainer_id: params[:id])
-        render json: pokemons
+    def update
+        pokemon = Pokemon.find_by(id: params[:id])
+        pokemon.trainer_id = params[:pokemon][:trainer_id]
+        pokemon.save!
+
     end
+
 end

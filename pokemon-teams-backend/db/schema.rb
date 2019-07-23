@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_23_142516) do
+ActiveRecord::Schema.define(version: 2019_07_23_171429) do
 
   create_table "pokemons", force: :cascade do |t|
     t.string "species"
     t.string "nickname"
-    t.integer "trainer_id", null: false
+    t.integer "trainer_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["trainer_id"], name: "index_pokemons_on_trainer_id"
